@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: secure-api
+  datasource:
+    url: "jdbc:h2:mem:notes;DB_CLOSE_DELAY=-1"
+    username: sa
+    password: "local-demo-db-password"
+  sql:
+    init:
+      mode: always
+  web:
+    error:
+      include-message: never
+      include-stacktrace: never
+  mvc:
+    log-request-details: false
+
+server:
+  address: 127.0.0.1
+  port: 8080
+
+app:
+  # Public example key for local laboratory use only; replace before deployment.
+  # Base64-encoded key, at least 32 bytes after decoding.
+  jwt-secret: "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
