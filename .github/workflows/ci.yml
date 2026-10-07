@@ -19,7 +19,7 @@ jobs:
       - name: Tests and build
         run: mvn -B -ntp verify
       - name: SAST - SpotBugs and Find Security Bugs
-        run: mvn -B -ntp spotbugs:spotbugs spotbugs:check
+        run: mvn -B -ntp spotbugs:check
       - name: Upload tests and SAST reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -39,10 +39,22 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
+      - name: Restore Dependency-Check database
+        id: dependency-check-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .dependency-check-data
+          key: ${{ runner.os }}-dependency-check-${{ hashFiles('pom.xml') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-dependency-check-${{ hashFiles('pom.xml') }}-
       - name: SCA - OWASP Dependency-Check (fail on CVSS >= 7)
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: mvn -B -ntp dependency-check:check
+      - name: Save Dependency-Check database
+        if: success() && steps.dependency-check-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .dependency-check-data
+          key: ${{ steps.dependency-check-cache.outputs.cache-primary-key }}
       - name: Upload SCA reports
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,13 +1,13 @@
 <FindBugsFilter>
   <!-- Only this stateless bearer API disables CSRF: no cookies, sessions or HTTP Basic. -->
   <Match>
-    <Class name="ru.itmo.secureapi.SecurityConfig"/>
+    <Class name="org.truskovski.SecurityConfig"/>
     <Method name="~lambda\$securityFilterChain\$.*"/>
     <Bug pattern="SPRING_CSRF_PROTECTION_DISABLED"/>
   </Match>
   <!-- Informational inventory of reviewed controllers, not a vulnerability. -->
   <Match>
-    <Class name="ru.itmo.secureapi.ApiController"/>
+    <Class name="org.truskovski.ApiController"/>
     <Bug pattern="SPRING_ENDPOINT"/>
   </Match>
 </FindBugsFilter>

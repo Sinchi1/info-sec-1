@@ -1,4 +1,5 @@
 target/
+.dependency-check-data/
 .tools/
 .idea/
 *.iml
